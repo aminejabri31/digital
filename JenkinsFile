@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Build') {
+            steps {
+                // Build your Spring project using Maven
+                bat 'mvn clean package'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                // Run tests using Maven
+                bat 'mvn test'
+            }
+        }
+        
+        stage('SonarQube Analysis') {
+            steps {
+                // Run SonarScanner analysis
+                withSonarQubeEnv('sq2') {
+                    bat 'mvn sonar:sonar'
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                // Deployment steps (e.g., deploying to a server)
+                // This may vary based on your deployment strategy
+                // Example: deploying to Tomcat
+                echo "Deployed"
+            }
+        }
+    }
+}
