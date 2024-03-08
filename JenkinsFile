@@ -32,16 +32,11 @@ pipeline {
         }
         
         stage('Quality Gate') {
-            steps {
-                // Check the quality gate status
-                script {
-                    def qg = waitForQualityGate() // Appel de la fonction waitForQualityGate() fournie par le plugin SonarQube
-                    if (qg.status != 'OK') {
-                        error "Quality Gate check failed: ${qg.status}"
-                    }
+             steps {
+ *         qualityGates() //this stage will fail if project quality doesn't meet its quality profile
+ *     }
                 }
-            }
-        }
+          
         
         stage('Deploy') {
             steps {
