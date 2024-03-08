@@ -33,8 +33,12 @@ pipeline {
         
         stage('Quality Gate') {
             steps {
-                waitForQualityGate abortPipeline: true
-            }
+                // Check the quality gate status
+                script {
+                    def qg = waitForQualityGate() // Appel de la fonction waitForQualityGate() fournie par le plugin SonarQube
+                    if (qg.status != 'OK') {
+                        error "Quality Gate check failed: ${qg.status}"
+                    }
                 }
             }
         }
