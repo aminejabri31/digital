@@ -32,11 +32,15 @@ pipeline {
         }
         
         stage('Quality Gate') {
-             steps {
- *         qualityGates() //this stage will fail if project quality doesn't meet its quality profile
- *     }
+               steps {
+                script {
+                    def qualityGate = waitForQualityGate()
+                    if (qualityGate.status != 'OK') {
+                        error "Pipeline aborted due to Quality Gate failure: ${qualityGate.status}"
+                    }
                 }
-          
+            }
+       }
         
         stage('Deploy') {
             steps {
